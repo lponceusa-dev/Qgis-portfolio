@@ -1,0 +1,381 @@
+<\!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leo Ponce — Geospatial Analysis Portfolio</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+<style>
+:root{color-scheme:light;--ink:#0d1117;--ink2:#24292f;--muted:#57606a;--border:#d0d7de;--bg:#ffffff;--bg2:#f6f8fa;--accent:#0969da;--accent2:#1a7f37;--accent3:#9a6700;--blue-soft:#ddf4ff;--green-soft:#dafbe1;--orange-soft:#fff8c5;--purple:#6e40c9;--purple-soft:#f3eeff;--hero-bg:#0d1117;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg2);color:var(--ink);line-height:1.6;}
+.hero{background:var(--hero-bg);color:#fff;padding:72px 24px 64px;position:relative;overflow:hidden;}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:40px 40px;}
+.hero-glow{position:absolute;top:-120px;right:-80px;width:600px;height:600px;background:radial-gradient(circle,rgba(9,105,218,.18) 0%,transparent 65%);pointer-events:none;}
+.hero-inner{max-width:900px;margin:0 auto;position:relative;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(9,105,218,.15);border:1px solid rgba(9,105,218,.35);color:#79c0ff;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:24px;}
+.hero-eyebrow span{width:6px;height:6px;background:#79c0ff;border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-size:clamp(36px,6vw,58px);font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin-bottom:14px;}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,#79c0ff,#56d364);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-desc{font-size:17px;color:rgba(255,255,255,.6);max-width:560px;margin-bottom:36px;line-height:1.75;}
+.hero-chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:48px;}
+.chip{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.8);padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;}
+.hero-stats{display:flex;flex-wrap:wrap;gap:0;border:1px solid rgba(255,255,255,.1);border-radius:12px;overflow:hidden;background:rgba(255,255,255,.04);}
+.stat-item{flex:1;min-width:140px;padding:22px 28px;border-right:1px solid rgba(255,255,255,.1);}
+.stat-item:last-child{border-right:none;}
+.stat-num{font-size:32px;font-weight:800;color:#fff;letter-spacing:-1px;line-height:1;}
+.stat-label{font-size:12px;color:rgba(255,255,255,.45);margin-top:5px;font-weight:500;}
+.nav{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+.nav-inner{max-width:900px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;}
+.nav-links{display:flex;}
+.nav-links a{padding:14px 16px;font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;border-bottom:2px solid transparent;transition:.15s;}
+.nav-links a:hover{color:var(--accent);border-bottom-color:var(--accent);}
+.nav-cta{font-size:12px;font-weight:700;color:var(--accent);background:var(--blue-soft);padding:6px 14px;border-radius:6px;text-decoration:none;}
+.page{max-width:900px;margin:0 auto;padding:56px 24px 100px;}
+.sect-head{margin-bottom:32px;}
+.sect-eyebrow{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+.sect-title{font-size:28px;font-weight:800;color:var(--ink);letter-spacing:-.5px;margin-bottom:8px;}
+.sect-sub{font-size:15px;color:var(--muted);max-width:600px;}
+.divider{border:none;border-top:1px solid var(--border);margin:64px 0;}
+.projects{display:flex;flex-direction:column;gap:20px;}
+.pcard{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:box-shadow .2s,transform .15s;}
+.pcard:hover{box-shadow:0 8px 32px rgba(0,0,0,.08);transform:translateY(-1px);}
+.pcard-top{padding:28px 28px 0;display:flex;gap:18px;align-items:flex-start;}
+.pcard-icon{width:54px;height:54px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.pcard-meta{flex:1;}
+.pcard-title{font-size:18px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.pcard-sub{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.pcard-sub-sep{color:var(--border);}
+.status{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.status-dot{width:6px;height:6px;border-radius:50%;}
+.s-done{background:var(--green-soft);color:#1a7f37;}.s-done .status-dot{background:#1a7f37;}
+.s-wip{background:var(--orange-soft);color:#9a6700;}.s-wip .status-dot{background:#9a6700;}
+.pcard-body{padding:20px 28px;}
+.pcard-desc{font-size:14px;color:#444;line-height:1.75;margin-bottom:20px;}
+.kv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:20px;}
+.kv{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:11px 14px;}
+.kv-k{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+.kv-v{font-size:13px;font-weight:600;color:var(--ink2);}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px;}
+.tag{font-size:12px;font-weight:600;padding:3px 9px;border-radius:6px;}
+.tag-blue{background:#ddf4ff;color:#0550ae;}
+.tag-green{background:#dafbe1;color:#116329;}
+.tag-purple{background:var(--purple-soft);color:#512a97;}
+.tag-gray{background:var(--bg2);color:var(--muted);border:1px solid var(--border);}
+.expand-btn{display:flex;align-items:center;gap:7px;background:none;border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:.15s;margin-bottom:16px;}
+.expand-btn:hover{border-color:var(--accent);color:var(--accent);}
+.expand-btn .arrow{transition:transform .2s;font-style:normal;}
+.expand-btn.open .arrow{transform:rotate(90deg);}
+.methodology{display:none;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px;}
+.methodology.show{display:block;}
+.meth-phase{margin-bottom:14px;}
+.meth-phase:last-child{margin-bottom:0;}
+.meth-phase-title{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.phase-num{background:var(--ink);color:#fff;width:18px;height:18px;border-radius:50%;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;}
+.meth-steps{display:flex;flex-wrap:wrap;gap:6px;}
+.meth-step{background:#fff;border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:12px;color:var(--ink2);}
+.outputs{display:flex;flex-wrap:wrap;gap:8px;}
+.output{display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-size:12px;color:var(--muted);font-weight:500;}
+.pcard-foot{background:var(--bg2);border-top:1px solid var(--border);padding:12px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.pcard-date{font-size:12px;color:var(--muted);}
+.map-showcase{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:20px;}
+.map-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);}
+.map-header-title{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.map-header-sub{font-size:13px;color:var(--muted);}
+.map-svg-wrap{position:relative;background:#1a2744;}
+.map-legend{position:absolute;bottom:16px;right:16px;background:rgba(0,0,0,.7);border-radius:8px;padding:12px 14px;}
+.legend-title{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px;}
+.legend-row{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.legend-row:last-child{margin-bottom:0;}
+.legend-dot{width:12px;height:12px;border-radius:2px;flex-shrink:0;}
+.legend-lbl{font-size:11px;color:rgba(255,255,255,.8);}
+.skills-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+@media(max-width:640px){.skills-layout{grid-template-columns:1fr;}}
+.skill-panel{background:#fff;border:1px solid var(--border);border-radius:12px;padding:24px;}
+.skill-panel-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:18px;}
+.skill-row{margin-bottom:12px;}
+.skill-row:last-child{margin-bottom:0;}
+.skill-header{display:flex;justify-content:space-between;margin-bottom:5px;}
+.skill-name{font-size:13px;color:var(--ink2);}
+.skill-pct{font-size:12px;font-weight:600;color:var(--muted);}
+.bar-bg{height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(.25,.46,.45,.94);}
+.bar-blue{background:linear-gradient(90deg,#0969da,#54aeff);}
+.bar-green{background:linear-gradient(90deg,#1a7f37,#4ac26b);}
+.chart-panel{background:#fff;border:1px solid var(--border);border-radius:12px;padding:24px;display:flex;flex-direction:column;align-items:center;}
+.chart-panel-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px;align-self:flex-start;}
+.chart-panel-sub{font-size:12px;color:var(--muted);margin-bottom:20px;align-self:flex-start;}
+.radar-wrap{width:100%;max-width:320px;}
+.about-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:32px;display:flex;gap:28px;align-items:flex-start;}
+.about-avatar{width:80px;height:80px;background:linear-gradient(135deg,#0969da,#6e40c9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;color:#fff;flex-shrink:0;letter-spacing:-1px;}
+.about-body{flex:1;}
+.about-name{font-size:22px;font-weight:800;color:var(--ink);margin-bottom:2px;letter-spacing:-.5px;}
+.about-role{font-size:14px;color:var(--accent);font-weight:600;margin-bottom:16px;}
+.about-bio{font-size:14px;color:#444;line-height:1.8;margin-bottom:20px;}
+.about-links{display:flex;flex-wrap:wrap;gap:10px;}
+.about-link{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--muted);background:var(--bg2);border:1px solid var(--border);padding:7px 14px;border-radius:8px;text-decoration:none;transition:.15s;}
+.about-link:hover{border-color:var(--accent);color:var(--accent);}
+.host-note{background:linear-gradient(135deg,#ddf4ff,#e6f4ff);border:1px solid #b6dcfe;border-radius:12px;padding:20px 24px;margin-top:20px;display:flex;gap:14px;align-items:flex-start;}
+.host-icon{font-size:22px;flex-shrink:0;}
+.host-title{font-size:14px;font-weight:700;color:#0550ae;margin-bottom:4px;}
+.host-desc{font-size:13px;color:#0969da;line-height:1.6;}
+.host-code{background:rgba(0,0,0,.06);border-radius:6px;padding:2px 7px;font-family:monospace;font-size:12px;}
+@media(max-width:600px){.hero{padding:48px 20px 40px;}.pcard-top,.pcard-body,.pcard-foot{padding-left:20px;padding-right:20px;}.about-card{flex-direction:column;gap:16px;}}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span></span>Geospatial Analysis Portfolio</div>
+    <h1>Leo Ponce —<br><em>QGIS Specialist</em></h1>
+    <p class="hero-desc">Building spatial analysis skills through real-world GIS projects. Focused on hydrology, environmental risk, and land use — using open federal datasets and core QGIS workflows.</p>
+    <div class="hero-chips">
+      <div class="chip">📍 Binghamton University, NY</div>
+      <div class="chip">🗺️ QGIS 3.34 LTR</div>
+      <div class="chip">🌐 Open Data Specialist</div>
+      <div class="chip">🔬 Independent Research</div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">GIS Projects</div></div>
+      <div class="stat-item"><div class="stat-num">8+</div><div class="stat-label">QGIS Tools Used</div></div>
+      <div class="stat-item"><div class="stat-num">4</div><div class="stat-label">Federal Data Sources</div></div>
+      <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">Analysis Domains</div></div>
+    </div>
+  </div>
+</div>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-links">
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#about">About</a>
+    </div>
+    <a class="nav-cta" href="mailto:lponce1@binghamton.edu">✉️ Contact</a>
+  </div>
+</nav>
+<div class="page">
+<section id="projects">
+  <div class="sect-head">
+    <div class="sect-eyebrow">Portfolio</div>
+    <div class="sect-title">Geospatial Projects</div>
+    <p class="sect-sub">Applied QGIS analysis using real federal datasets — covering hydrology, land use change, and urban equity across multiple study areas.</p>
+  </div>
+  <div class="projects">
+    <div class="pcard">
+      <div class="pcard-top">
+        <div class="pcard-icon" style="background:#ddf4ff;">🌊</div>
+        <div class="pcard-meta">
+          <div class="pcard-title">Urban Flood Risk Assessment</div>
+          <div class="pcard-sub"><span>Harris County (Houston), TX</span><span class="pcard-sub-sep">·</span><span>Hydrology &amp; Risk Scoring</span><span class="pcard-sub-sep">·</span><span class="status s-done"><span class="status-dot"></span>Completed</span></div>
+        </div>
+      </div>
+      <div class="pcard-body">
+        <p class="pcard-desc">Multi-layer flood vulnerability analysis for one of the most flood-prone metro areas in the US. Combines SRTM elevation data (30m resolution), the FEMA National Flood Hazard Layer, and US Census population data to generate a composite 0–1 vulnerability index per census tract. Final outputs validated against documented Hurricane Harvey (2017) inundation extents, confirming high-risk cluster alignment at the Buffalo Bayou corridor, Addicks/Barker reservoir spillways, and Houston Ship Channel industrial zones.</p>
+        <div class="kv-grid">
+          <div class="kv"><div class="kv-k">Analysis Type</div><div class="kv-v">Multi-criteria Risk</div></div>
+          <div class="kv"><div class="kv-k">CRS</div><div class="kv-v">EPSG:32615 (UTM 15N)</div></div>
+          <div class="kv"><div class="kv-k">Resolution</div><div class="kv-v">30m SRTM DEM</div></div>
+          <div class="kv"><div class="kv-k">Data Sources</div><div class="kv-v">USGS · FEMA · Census</div></div>
+          <div class="kv"><div class="kv-k">Elevation Threshold</div><div class="kv-v">≤ 8m (flood proxy)</div></div>
+          <div class="kv"><div class="kv-k">Risk Weights</div><div class="kv-v">60% area · 40% density</div></div>
+        </div>
+        <div class="tags">
+          <span class="tag tag-blue">GDAL Raster Tools</span><span class="tag tag-blue">Raster Calculator</span><span class="tag tag-blue">Polygonize</span>
+          <span class="tag tag-green">Spatial Join</span><span class="tag tag-green">Field Calculator</span><span class="tag tag-green">Intersection</span>
+          <span class="tag tag-purple">Graduated Symbology</span><span class="tag tag-purple">Print Layout</span><span class="tag tag-gray">QuickOSM</span>
+        </div>
+        <button class="expand-btn" onclick="toggleMeth(this)"><span class="arrow">▶</span> View Full Methodology (4 Phases, 13 Steps)</button>
+        <div class="methodology">
+          <div class="meth-phase">
+            <div class="meth-phase-title"><span class="phase-num">1</span>Project Setup &amp; Data Loading</div>
+            <div class="meth-steps">
+              <span class="meth-step">New QGIS project, CRS EPSG:32615</span><span class="meth-step">Load SRTM DEM tiles</span><span class="meth-step">Merge raster tiles</span><span class="meth-step">Clip DEM to Harris County</span><span class="meth-step">Generate hillshade</span>
+            </div>
+          </div>
+          <div class="meth-phase">
+            <div class="meth-phase-title"><span class="phase-num">2</span>Elevation &amp; Hydrology Analysis</div>
+            <div class="meth-steps">
+              <span class="meth-step">Raster Calc: (dem@1 ≤ 8) * 1</span><span class="meth-step">Polygonize binary → remove DN=0</span><span class="meth-step">Validate vs. FEMA Zone AE/A</span>
+            </div>
+          </div>
+          <div class="meth-phase">
+            <div class="meth-phase-title"><span class="phase-num">3</span>Population Vulnerability Overlay</div>
+            <div class="meth-steps">
+              <span class="meth-step">Join ACS B01003 to census tracts</span><span class="meth-step">Field Calc: pop_density = pop / area_km²</span><span class="meth-step">Intersect flood zones × tracts</span>
+            </div>
+          </div>
+          <div class="meth-phase">
+            <div class="meth-phase-title"><span class="phase-num">4</span>Risk Scoring &amp; Cartography</div>
+            <div class="meth-steps">
+              <span class="meth-step">Score: (area_flood/area_tract)×0.6 + (pop_norm)×0.4</span><span class="meth-step">YlOrRd, 5 quantile classes</span><span class="meth-step">Print Layout → PDF + PNG</span>
+            </div>
+          </div>
+        </div>
+        <div class="outputs">
+          <div class="output">📄 dem_harris.tif</div><div class="output">📄 hillshade.tif</div><div class="output">📄 low_elev_binary.tif</div>
+          <div class="output">📄 low_elev_poly.shp</div><div class="output">📄 flood_pop_intersect.shp</div><div class="output">🗺️ FloodRisk_HarrisCounty.pdf</div>
+        </div>
+      </div>
+      <div class="pcard-foot"><div class="status s-done"><span class="status-dot"></span>Completed — Full workflow documented</div><div class="pcard-date">June 2026</div></div>
+    </div>
+    <div class="pcard">
+      <div class="pcard-top">
+        <div class="pcard-icon" style="background:#dafbe1;">🌿</div>
+        <div class="pcard-meta">
+          <div class="pcard-title">Land Use / Land Cover Change Detection</div>
+          <div class="pcard-sub"><span>Binghamton, NY Metro Area</span><span class="pcard-sub-sep">·</span><span>Multi-temporal Raster Analysis</span><span class="pcard-sub-sep">·</span><span class="status s-wip"><span class="status-dot"></span>In Progress</span></div>
+        </div>
+      </div>
+      <div class="pcard-body">
+        <p class="pcard-desc">Comparing NLCD (National Land Cover Database) classifications from 2011 and 2021 to quantify urban sprawl and green space loss across the Broome County metro area. A raster change detection matrix identifies class-to-class transitions (e.g., forest → developed, wetland → cultivated), producing area statistics and a choropleth map highlighting conversion hotspots over the decade.</p>
+        <div class="kv-grid">
+          <div class="kv"><div class="kv-k">Analysis Type</div><div class="kv-v">LULC Change Detection</div></div>
+          <div class="kv"><div class="kv-k">CRS</div><div class="kv-v">EPSG:5070 (Albers EA)</div></div>
+          <div class="kv"><div class="kv-k">Time Range</div><div class="kv-v">2011 → 2021 (10 yr)</div></div>
+          <div class="kv"><div class="kv-k">Data Source</div><div class="kv-v">USGS NLCD</div></div>
+        </div>
+        <div class="tags"><span class="tag tag-blue">Raster Calculator</span><span class="tag tag-blue">Reclassify by Layer</span><span class="tag tag-green">Zonal Statistics</span><span class="tag tag-purple">Color Ramp Shader</span><span class="tag tag-gray">NLCD 6-class Schema</span></div>
+      </div>
+      <div class="pcard-foot"><div class="status s-wip"><span class="status-dot"></span>In progress — change matrix underway</div><div class="pcard-date">June 2026</div></div>
+    </div>
+    <div class="pcard">
+      <div class="pcard-top">
+        <div class="pcard-icon" style="background:#f3eeff;">🚌</div>
+        <div class="pcard-meta">
+          <div class="pcard-title">Transit Accessibility &amp; Equity Analysis</div>
+          <div class="pcard-sub"><span>Broome County, NY</span><span class="pcard-sub-sep">·</span><span>Network Analysis &amp; Equity Mapping</span><span class="pcard-sub-sep">·</span><span class="status s-wip"><span class="status-dot"></span>In Progress</span></div>
+        </div>
+      </div>
+      <div class="pcard-body">
+        <p class="pcard-desc">Walking catchment areas generated from GTFS bus stop coordinates using QNEAT3 service area analysis, then intersected with ACS low-income population data to identify transit deserts — areas with high need and poor coverage. Outputs a bivariate choropleth surfacing equity gaps to support local transit planning decisions.</p>
+        <div class="kv-grid">
+          <div class="kv"><div class="kv-k">Analysis Type</div><div class="kv-v">Network / Equity</div></div>
+          <div class="kv"><div class="kv-k">Key Plugin</div><div class="kv-v">QNEAT3</div></div>
+          <div class="kv"><div class="kv-k">Data Sources</div><div class="kv-v">GTFS · ACS · OSM</div></div>
+          <div class="kv"><div class="kv-k">Output</div><div class="kv-v">Bivariate Choropleth</div></div>
+        </div>
+        <div class="tags"><span class="tag tag-blue">QNEAT3 Plugin</span><span class="tag tag-blue">Service Area Analysis</span><span class="tag tag-green">Join by Location</span><span class="tag tag-purple">Bivariate Symbology</span><span class="tag tag-gray">GTFS Parsing</span></div>
+      </div>
+      <div class="pcard-foot"><div class="status s-wip"><span class="status-dot"></span>In progress — catchment areas generated</div><div class="pcard-date">June 2026</div></div>
+    </div>
+  </div>
+  <div class="map-showcase">
+    <div class="map-header">
+      <div class="map-header-title">Project 1 — Flood Vulnerability Index, Harris County TX</div>
+      <div class="map-header-sub">Composite risk score (0–1) by census tract · YlOrRd classification · 5 quantile classes</div>
+    </div>
+    <div class="map-svg-wrap">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+        <rect width="880" height="340" fill="#1a2744"/>
+        <g stroke="rgba(255,255,255,0.04)" stroke-width="1">
+          <line x1="0" y1="85" x2="880" y2="85"/><line x1="0" y1="170" x2="880" y2="170"/>
+          <line x1="0" y1="255" x2="880" y2="255"/><line x1="220" y1="0" x2="220" y2="340"/>
+          <line x1="440" y1="0" x2="440" y2="340"/><line x1="660" y1="0" x2="660" y2="340"/>
+        </g>
+        <ellipse cx="320" cy="180" rx="180" ry="90" fill="rgba(30,100,200,0.25)" stroke="rgba(60,140,240,0.3)" stroke-width="1"/>
+        <ellipse cx="160" cy="240" rx="80" ry="40" fill="rgba(30,100,200,0.2)" stroke="rgba(60,140,240,0.25)" stroke-width="1"/>
+        <ellipse cx="310" cy="175" rx="55" ry="28" fill="#d73027" opacity="0.82"/>
+        <ellipse cx="165" cy="238" rx="38" ry="18" fill="#d73027" opacity="0.78"/>
+        <ellipse cx="580" cy="200" rx="32" ry="20" fill="#d73027" opacity="0.75"/>
+        <ellipse cx="260" cy="195" rx="45" ry="22" fill="#f46d43" opacity="0.7"/>
+        <ellipse cx="380" cy="165" rx="38" ry="18" fill="#f46d43" opacity="0.68"/>
+        <ellipse cx="540" cy="185" rx="28" ry="16" fill="#f46d43" opacity="0.65"/>
+        <ellipse cx="220" cy="210" rx="55" ry="26" fill="#fdae61" opacity="0.55"/>
+        <ellipse cx="420" cy="180" rx="48" ry="22" fill="#fdae61" opacity="0.52"/>
+        <ellipse cx="620" cy="185" rx="30" ry="16" fill="#fdae61" opacity="0.5"/>
+        <ellipse cx="180" cy="200" rx="65" ry="30" fill="#fee090" opacity="0.42"/>
+        <ellipse cx="460" cy="190" rx="55" ry="24" fill="#fee090" opacity="0.4"/>
+        <ellipse cx="660" cy="175" rx="38" ry="20" fill="#fee090" opacity="0.4"/>
+        <ellipse cx="140" cy="170" rx="70" ry="32" fill="#ffffbf" opacity="0.28"/>
+        <ellipse cx="700" cy="190" rx="50" ry="24" fill="#ffffbf" opacity="0.26"/>
+        <ellipse cx="780" cy="180" rx="45" ry="22" fill="#ffffbf" opacity="0.24"/>
+        <g stroke="rgba(255,255,255,0.18)" stroke-width="1" fill="none">
+          <line x1="0" y1="172" x2="880" y2="172"/><line x1="440" y1="0" x2="440" y2="340"/>
+          <line x1="0" y1="120" x2="880" y2="200"/><line x1="200" y1="0" x2="300" y2="340"/>
+        </g>
+        <text x="310" y="166" fill="rgba(255,255,255,0.9)" font-size="11" font-family="system-ui" font-weight="700" text-anchor="middle">Downtown Houston</text>
+        <text x="165" y="232" fill="rgba(255,255,255,0.75)" font-size="9" font-family="system-ui" text-anchor="middle">Addicks/Barker</text>
+        <text x="580" y="194" fill="rgba(255,255,255,0.75)" font-size="9" font-family="system-ui" text-anchor="middle">Ship Channel</text>
+        <rect x="30" y="308" width="80" height="4" fill="rgba(255,255,255,0.6)" rx="2"/>
+        <text x="30" y="322" fill="rgba(255,255,255,0.45)" font-size="9" font-family="system-ui">0</text>
+        <text x="100" y="322" fill="rgba(255,255,255,0.45)" font-size="9" font-family="system-ui">10 km</text>
+        <text x="840" y="38" fill="rgba(255,255,255,0.6)" font-size="12" font-family="system-ui" font-weight="700" text-anchor="middle">N</text>
+        <line x1="840" y1="44" x2="840" y2="66" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+        <polygon points="840,44 836,56 840,53 844,56" fill="rgba(255,255,255,0.6)"/>
+      </svg>
+      <div class="map-legend">
+        <div class="legend-title">Vulnerability Index</div>
+        <div class="legend-row"><div class="legend-dot" style="background:#d73027;"></div><span class="legend-lbl">Very High</span></div>
+        <div class="legend-row"><div class="legend-dot" style="background:#f46d43;"></div><span class="legend-lbl">High</span></div>
+        <div class="legend-row"><div class="legend-dot" style="background:#fdae61;"></div><span class="legend-lbl">Moderate</span></div>
+        <div class="legend-row"><div class="legend-dot" style="background:#fee090;"></div><span class="legend-lbl">Low</span></div>
+        <div class="legend-row"><div class="legend-dot" style="background:#ffffbf;"></div><span class="legend-lbl">Very Low</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+<section id="skills">
+  <div class="sect-head">
+    <div class="sect-eyebrow">Competencies</div>
+    <div class="sect-title">Technical Skills</div>
+    <p class="sect-sub">Skills built through hands-on, project-based QGIS work — applying real federal datasets to solve spatial problems across multiple domains.</p>
+  </div>
+  <div class="skills-layout">
+    <div class="skill-panel">
+      <div class="skill-panel-title">🗺️ Core QGIS Workflows</div>
+      <div class="skill-row"><div class="skill-header"><span class="skill-name">Layer Mgmt &amp; CRS Projection</span><span class="skill-pct">70%</span></div><div class="bar-bg"><div class="bar-fill bar-blue" style="width:0%" data-w="70%"></div></div></div>
+      <div class="skill-row"><div class="skill-header"><span class="skill-name">Raster Analysis (DEM, Calc)</span><span class="skill-pct">65%</span></div><div class="bar-bg"><div class="bar-fill bar-blue" style="width:0%" data-w="65%"></div></div></div>
+      <div class="skill-row"><div class="skill-header"><span class="skill-name">Vector Operations &amp; Joins</span><span class="skill-pct">60%</span></div><div class="bar-bg"><div class="bar-fill bar-blue" style="width:0%" data-w="60%"></div></div></div>
+      <div class="skill-row"><div class="skill-header"><span class="skill-name">Print Layout &amp; Cartography</span><span class="skill-pct">60%</span></div><div class="bar-bg"><div class="bar-fill bar-blue" style="width:0%" data-w="60%"></div></div></div>
+      <div class="skill-row"><div class="skill-header"><span class="skill-name">Field Calculator Expressions</span><span class="skill-pct">65%</span></div><div class="bar-bg"><div class="bar-fill bar-blue" style="width:0%" data-w="65%"></div></div></div>
+    </div>
+    <div class="skill-panel">
+      <div class="skill-panel-title">📊 Data &amp; Domain Knowledge</div>
+      <div class="skill-row"><div class="skill-header"><span class="skill-name">Federal Open Data (USGS/FEMA)</span><span class="skill-pct">75%</span></div><div class="bar-bg"><div class="bar-fill bar-green" style="width:0%" data-w="75%"></div></div></div>
+      <div class="skill-row"><div class="skill-header"><span class="skill-name">Hydrology / Flood Analysis</span><span class="skill-pct">65%</span></div><div class="bar-bg"><div class="bar-fill bar-green" style="width:0%" data-w="65%"></div></div></div>
+      <div class="skill-row"><div class="skill-header"><span class="skill-name">LULC / Change Detection</span><span class="skill-pct">55%</span></div><div class="bar-bg"><div class="bar-fill bar-green" style="width:0%" data-w="55%"></div></div></div>
+      <div class="skill-row"><div class="skill-header"><span class="skill-name">GIS Concepts &amp; Spatial Theory</span><span class="skill-pct">65%</span></div><div class="bar-bg"><div class="bar-fill bar-green" style="width:0%" data-w="65%"></div></div></div>
+      <div class="skill-row"><div class="skill-header"><span class="skill-name">Shapefile / GeoTIFF Formats</span><span class="skill-pct">70%</span></div><div class="bar-bg"><div class="bar-fill bar-green" style="width:0%" data-w="70%"></div></div></div>
+    </div>
+    <div class="chart-panel" style="grid-column:1/-1;">
+      <div class="chart-panel-title">Domain Coverage Radar</div>
+      <div class="chart-panel-sub">Self-assessed competency across key GIS analysis domains</div>
+      <div class="radar-wrap"><canvas id="radarChart"></canvas></div>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+<section id="about">
+  <div class="sect-head">
+    <div class="sect-eyebrow">Background</div>
+    <div class="sect-title">About Me</div>
+  </div>
+  <div class="about-card">
+    <div class="about-avatar">LP</div>
+    <div class="about-body">
+      <div class="about-name">Leo Ponce</div>
+      <div class="about-role">Geospatial Learner · Binghamton University</div>
+      <p class="about-bio">I'm a motivated, self-directed learner building hands-on QGIS skills through real project work. My projects draw on publicly available federal datasets — USGS elevation models, FEMA flood hazard layers, US Census shapefiles — and apply core GIS workflows including raster analysis, spatial joins, field expressions, and print-quality cartography.<br><br>I'm particularly interested in how spatial data can inform decisions around environmental risk, urban planning, and community equity. I bring strong analytical thinking, attention to technical detail, and the drive to go deep on new subjects quickly.</p>
+      <div class="about-links">
+        <a class="about-link" href="mailto:lponce1@binghamton.edu">✉️ lponce1@binghamton.edu</a>
+        <a class="about-link" href="#">📄 Resume</a>
+        <a class="about-link" href="#">🗺️ GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+const bars=document.querySelectorAll('.bar-fill[data-w]');
+const io=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting){en.target.style.width=en.target.dataset.w;io.unobserve(en.target);}});},{threshold:0.2});
+bars.forEach(b=>io.observe(b));
+function toggleMeth(btn){btn.classList.toggle('open');btn.nextElementSibling.classList.toggle('show');}
+const ctx=document.getElementById('radarChart').getContext('2d');
+new Chart(ctx,{type:'radar',data:{labels:['Hydrology\n& Flood','Land Use\nAnalysis','Network\nAnalysis','Raster\nOps','Vector\nOps','Cartography','Data\nSourcing'],datasets:[{label:'Skill Level',data:[65,55,45,65,60,60,75],backgroundColor:'rgba(9,105,218,0.15)',borderColor:'#0969da',borderWidth:2,pointBackgroundColor:'#0969da',pointRadius:4}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{r:{min:0,max:100,ticks:{stepSize:25,color:'#888',font:{size:10}},grid:{color:'rgba(0,0,0,0.07)'},angleLines:{color:'rgba(0,0,0,0.07)'},pointLabels:{font:{size:11},color:'#444'}}}}});
+</script>
+</body>
+</html>
